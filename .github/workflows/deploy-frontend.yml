@@ -30,6 +30,7 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+          VITE_CLERK_INSTANCE_URL: https://epic-marlin-86.clerk.accounts.dev
       
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
