@@ -91,97 +91,102 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 
   const maxDepth = 3;
   const canNest = depth < maxDepth;
-  const marginLeft = depth > 0 ? `${depth * 16}px` : '0';
+  const marginLeft = depth > 0 ? `${depth * 12}px` : '0';
 
   return (
     <div style={{ marginLeft }} className="mb-3">
       {/* Comment Box */}
-      <div className="card bg-base-100 border border-base-300">
-        <div className="card-body p-3">
-          {/* Header */}
-          <div className="flex items-center gap-2 justify-between">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <div className="avatar placeholder">
-                <div className="bg-primary text-primary-content rounded-full w-8">
-                  <span className="text-xs font-bold">
-                    {comment.author.email.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+      <div className="bg-base-100 border border-base-300 rounded-lg p-4 hover:border-base-400 transition-colors duration-200">
+        {/* Header */}
+        <div className="flex items-start gap-3 justify-between mb-3">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="avatar placeholder flex-shrink-0">
+              <div className="bg-gradient-to-br from-primary to-secondary text-primary-content rounded-full w-8">
+                <span className="text-xs font-bold">
+                  {comment.author.email.charAt(0).toUpperCase()}
+                </span>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-sm">{authorName}</p>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-sm">{authorName}</p>
+              <div className="flex items-center gap-2 flex-wrap mt-0.5">
                 <p className="text-xs opacity-50">{createdAt}</p>
-              </div>
-              <div className="badge badge-sm badge-accent">
-                {comment.author.total_karma} karma
+                <span className="text-xs badge badge-sm badge-outline opacity-70">
+                  {comment.author.total_karma} karma
+                </span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Content */}
-          <p className="text-sm mt-2 text-base-content">{comment.content}</p>
+        {/* Content */}
+        <p className="text-sm leading-relaxed mb-3 opacity-90">{comment.content}</p>
 
-          {/* Actions */}
-          <div className="card-actions justify-start gap-2 mt-2">
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleLike}
+            className={`btn btn-xs rounded-lg font-medium transition-all ${
+              isLiked 
+                ? 'btn-primary text-primary-content' 
+                : 'btn-ghost border border-base-300 hover:border-primary hover:text-primary'
+            }`}
+            disabled={isLiked}
+          >
+            {isLiked ? '👍 Liked' : '👍 Like'} {likesCount > 0 && `(${likesCount})`}
+          </button>
+          {canNest && (
             <button
-              onClick={handleLike}
-              className={`btn btn-xs gap-1 ${isLiked ? 'btn-primary' : 'btn-ghost'}`}
+              onClick={() => {
+                setShowReplyForm(!showReplyForm);
+                onReplyClick?.(comment.id);
+              }}
+              className="btn btn-xs btn-ghost rounded-lg border border-base-300 hover:border-secondary hover:text-secondary transition-all"
             >
-              👍 {likesCount}
+              💬 Reply
             </button>
-            {canNest && (
-              <button
-                onClick={() => {
-                  setShowReplyForm(!showReplyForm);
-                  onReplyClick?.(comment.id);
-                }}
-                className="btn btn-xs btn-ghost gap-1"
-              >
-                💬 Reply
-              </button>
-            )}
-          </div>
-
-          {/* Reply Form */}
-          {showReplyForm && canNest && (
-            <form onSubmit={handleReplySubmit} className="mt-3 space-y-2">
-              <textarea
-                value={replyContent}
-                onChange={(e) => setReplyContent(e.target.value)}
-                placeholder="Write a reply..."
-                className="textarea textarea-bordered textarea-sm w-full"
-                rows={2}
-              />
-              <div className="flex gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowReplyForm(false);
-                    setReplyContent('');
-                  }}
-                  className="btn btn-sm btn-ghost"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-primary"
-                  disabled={isSubmitting || !replyContent.trim()}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="loading loading-spinner loading-xs"></span>
-                      Posting...
-                    </>
-                  ) : (
-                    'Post Reply'
-                  )}
-                </button>
-              </div>
-            </form>
           )}
         </div>
+
+        {/* Reply Form */}
+        {showReplyForm && canNest && (
+          <form onSubmit={handleReplySubmit} className="mt-4 pt-4 border-t border-base-300 space-y-3">
+            <textarea
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder="Share your reply..."
+              className="textarea textarea-bordered textarea-sm w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm"
+              rows={2}
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowReplyForm(false);
+                  setReplyContent('');
+                }}
+                className="btn btn-xs btn-ghost rounded-lg"
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-xs btn-primary rounded-lg font-medium"
+                disabled={isSubmitting || !replyContent.trim()}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Posting...
+                  </>
+                ) : (
+                  'Post'
+                )}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
       {/* Nested Replies */}
