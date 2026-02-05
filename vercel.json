@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist",
+  "rootDirectory": "frontend",
+  "env": {
+    "VITE_CLERK_INSTANCE_URL": "https://epic-marlin-86.clerk.accounts.dev"
+  }
+}
