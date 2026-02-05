@@ -61,7 +61,7 @@ export const api = {
   // Comments
   getComments: (page = 1) => apiClient.get(`/comments/?page=${page}`),
   getComment: (id: number) => apiClient.get(`/comments/${id}/`),
-  createComment: (data: { post: number; content: string }) =>
+  createComment: (data: { post: number; content: string; parent?: number }) =>
     apiClient.post('/comments/', data),
   updateComment: (id: number, data: { content: string }) =>
     apiClient.put(`/comments/${id}/`, data),
