@@ -6,49 +6,44 @@ import { GuestAuthProvider } from './context/GuestAuthContext'
 import './index.css'
 import App from './App.tsx'
 
-const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY?.trim() || '';
+const publishableKey = (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || '').trim();
 const guestMode = import.meta.env.VITE_GUEST_MODE === 'true';
 
-console.log('🔧 App Config:', {
-  clerkEnabled: !!publishableKey && !guestMode,
+console.log('🚀 PLAYTO App Starting:', {
+  clerkConfigured: !!publishableKey && publishableKey.length > 10,
   guestMode,
   apiUrl: import.meta.env.VITE_API_URL
 });
 
+if (!publishableKey || publishableKey.length < 10) {
+  console.warn('⚠️  Clerk not configured - using guest mode');
+}
+
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');
 
-// Render with Clerk only if valid key exists and guest mode is off
-const render = () => {
-  if (publishableKey && !guestMode) {
-    createRoot(rootElement).render(
-      <StrictMode>
-        <ClerkProvider 
-          publishableKey={publishableKey}
-          afterSignOutUrl="/"
-          signInUrl="/sign-in"
-          signUpUrl="/sign-up"
-        >
-          <ThemeProvider>
-            <GuestAuthProvider>
-              <App />
-            </GuestAuthProvider>
-          </ThemeProvider>
-        </ClerkProvider>
-      </StrictMode>
-    );
-  } else {
-    // Guest mode or no Clerk key - skip auth
-    createRoot(rootElement).render(
-      <StrictMode>
+// Render app with appropriate auth provider based on Clerk key
+const shouldUseClerk = publishableKey.length > 10 && !guestMode;
+
+createRoot(rootElement).render(
+  <StrictMode>
+    {shouldUseClerk ? (
+      <ClerkProvider 
+        publishableKey={publishableKey}
+        afterSignOutUrl="/"
+      >
         <ThemeProvider>
           <GuestAuthProvider>
             <App />
           </GuestAuthProvider>
         </ThemeProvider>
-      </StrictMode>
-    );
-  }
-};
-
-render();
+      </ClerkProvider>
+    ) : (
+      <ThemeProvider>
+        <GuestAuthProvider>
+          <App />
+        </GuestAuthProvider>
+      </ThemeProvider>
+    )}
+  </StrictMode>
+);
