@@ -17,6 +17,7 @@ if (publishableKey.length < 20) {
 
 console.log('✅ PLAYTO initializing with Clerk authentication');
 console.log('📍 API:', import.meta.env.VITE_API_URL);
+// Deployment trigger - workflow updated to use npm build instead of vercel build
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');
