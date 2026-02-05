@@ -27,6 +27,7 @@ createRoot(rootElement).render(
   <StrictMode>
     <ClerkProvider 
       publishableKey={publishableKey}
+      instanceUrl={clerkInstanceUrl}
       afterSignOutUrl="/"
     >
       <ThemeProvider>
