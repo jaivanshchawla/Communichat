@@ -1,7 +1,4 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "env": {
-    "VITE_CLERK_INSTANCE_URL": "https://epic-marlin-86.clerk.accounts.dev"
-  }
+  "outputDirectory": "dist"
 }
