@@ -1,16 +1,17 @@
 """
-PLAYTO API Views - REST Endpoints for Posts, Comments, Likes
+PLAYTO API Views - REST Endpoints for Posts, Comments, Likes, Leaderboard
 """
 from rest_framework import viewsets, status, permissions
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from .models import User, Post, Comment, PostLike, CommentLike
 from .serializers import (
-    UserSerializer, PostSerializer, PostDetailSerializer, PostCreateSerializer,
-    CommentSerializer, CommentCreateSerializer, PostLikeSerializer, CommentLikeSerializer
+    UserSerializer, PostSerializer, CommentSerializer, PostLikeSerializer, CommentLikeSerializer
 )
+from .utils import get_leaderboard_24h
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -157,3 +158,24 @@ class CommentLikeViewSet(viewsets.ReadOnlyModelViewSet):
     """Read-only endpoint for comment likes (use /comments/{id}/like/ instead)"""
     queryset = CommentLike.objects.all()
     serializer_class = CommentLikeSerializer
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def leaderboard_view(request):
+    """
+    GET /api/leaderboard/ - Top 5 users by 24-hour karma
+    Returns user profile data with total_karma earned in last 24 hours
+    """
+    limit = int(request.query_params.get('limit', 5))
+    limit = min(limit, 100)  # Cap at 100 for performance
+    
+    leaderboard_data = get_leaderboard_24h(limit=limit)
+    
+    return Response(
+        {
+            'count': len(leaderboard_data),
+            'results': leaderboard_data
+        },
+        status=status.HTTP_200_OK
+    )

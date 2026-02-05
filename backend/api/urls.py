@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .views import UserViewSet, PostViewSet, CommentViewSet, PostLikeViewSet, CommentLikeViewSet
+from .views import UserViewSet, PostViewSet, CommentViewSet, PostLikeViewSet, CommentLikeViewSet, leaderboard_view
 
 
 class HealthCheckView(APIView):
@@ -22,6 +22,7 @@ class HealthCheckView(APIView):
                 "posts": "/api/posts/",
                 "comments": "/api/comments/",
                 "users": "/api/users/",
+                "leaderboard": "/api/leaderboard/",
             }
         }, status=status.HTTP_200_OK)
 
@@ -35,5 +36,6 @@ router.register(r'comment-likes', CommentLikeViewSet, basename='comment-like')
 
 urlpatterns = [
     path('', HealthCheckView.as_view(), name='api-health'),
+    path('leaderboard/', leaderboard_view, name='leaderboard'),
     path('', include(router.urls)),
 ]
