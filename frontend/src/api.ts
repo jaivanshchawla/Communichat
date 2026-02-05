@@ -73,6 +73,9 @@ export const api = {
   getUsers: (page = 1) => apiClient.get(`/users/?page=${page}`),
   getUser: (id: number) => apiClient.get(`/users/${id}/`),
 
+  // Leaderboard
+  getLeaderboard: (limit = 5) => apiClient.get(`/leaderboard/?limit=${limit}`),
+
   // Health check
   healthCheck: () => apiClient.get('/'),
 };
