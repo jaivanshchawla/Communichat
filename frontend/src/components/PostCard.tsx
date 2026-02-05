@@ -46,7 +46,6 @@ export const PostCard: React.FC<PostCardProps> = ({
   isLiked = false,
 }) => {
   const [showComments, setShowComments] = useState(false);
-  const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState('');
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [comments, setComments] = useState<Comment[]>(post.comments || []);
@@ -71,7 +70,6 @@ export const PostCard: React.FC<PostCardProps> = ({
       } as any);
       setComments([response.data, ...comments]);
       setReplyContent('');
-      setShowReplyForm(false);
     } catch (error) {
       console.error('Failed to post comment:', error);
       alert('Failed to post comment');
@@ -141,10 +139,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               <div className="flex gap-2 justify-end mt-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    setShowReplyForm(false);
-                    setReplyContent('');
-                  }}
+                  onClick={() => setReplyContent('')}
                   className="btn btn-sm btn-ghost"
                   disabled={isSubmittingReply}
                 >
