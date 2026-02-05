@@ -18,7 +18,7 @@ interface Post {
 }
 
 function Feed() {
-  const { getToken, userId } = useAuth();
+  const { getToken, userId, isLoaded } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -26,19 +26,27 @@ function Feed() {
 
   // Load posts on mount and when auth changes
   useEffect(() => {
-    loadPosts();
-  }, [userId]);
+    if (isLoaded) {
+      loadPosts();
+    }
+  }, [userId, isLoaded]);
 
   // Set auth token when available
   useEffect(() => {
     const setupAuth = async () => {
-      const token = await getToken();
-      if (token) {
-        setAuthToken(token);
+      try {
+        const token = await getToken();
+        if (token) {
+          setAuthToken(token);
+        }
+      } catch (error) {
+        console.warn('Auth setup failed (continuing anyway):', error);
       }
     };
-    setupAuth();
-  }, [getToken]);
+    if (isLoaded) {
+      setupAuth();
+    }
+  }, [getToken, isLoaded]);
 
   const loadPosts = async () => {
     try {
@@ -147,9 +155,43 @@ function Feed() {
 }
 
 export default function App() {
+  const { isLoaded } = useAuth();
+  
   return (
-    <SignedIn>
-      <Feed />
-    </SignedIn>
+    <>
+      <SignedIn>
+        <Feed />
+      </SignedIn>
+      <SignedOut>
+        {/* Fallback when not signed in OR Clerk not ready */}
+        <div className="min-h-screen bg-base-100">
+          <div className="navbar bg-base-200 shadow-md">
+            <div className="flex-1 px-4">
+              <h1 className="text-2xl font-bold">🎮 PLAYTO</h1>
+            </div>
+            <div className="flex-none gap-4 pr-4">
+              <ThemeSwitcher />
+              <SignInButton>
+                <button className="btn btn-primary">Sign In</button>
+              </SignInButton>
+            </div>
+          </div>
+          
+          <div className="max-w-4xl mx-auto p-4 pt-8">
+            <div className="card bg-base-200 shadow-lg p-8 text-center">
+              <h2 className="text-3xl font-bold mb-4">Welcome to PLAYTO</h2>
+              <p className="text-lg mb-6 opacity-75">A modern community where ideas matter.</p>
+              {!isLoaded && (
+                <div className="loading loading-spinner loading-lg mb-4"></div>
+              )}
+              <SignInButton>
+                <button className="btn btn-lg btn-primary">Get Started</button>
+              </SignInButton>
+            </div>
+          </div>
+        </div>
+      </SignedOut>
+    </>
   );
 }
+

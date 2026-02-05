@@ -5,18 +5,45 @@ import { ThemeProvider } from './context/ThemeContext'
 import './index.css'
 import App from './App.tsx'
 
-const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY?.trim();
 
-if (!publishableKey) {
-  throw new Error('Missing Clerk Publishable Key');
+console.log('🔑 Clerk Key Check:', {
+  exists: !!publishableKey,
+  length: publishableKey?.length,
+  prefix: publishableKey?.substring(0, 10)
+});
+
+// Render with or without Clerk (fallback mode)
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  throw new Error('Root element not found');
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={publishableKey}>
+const render = () => {
+  const content = publishableKey ? (
+    <StrictMode>
+      <ClerkProvider 
+        publishableKey={publishableKey}
+        afterSignOutUrl="/"
+        signInUrl="/sign-in"
+        signUpUrl="/sign-up"
+      >
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </ClerkProvider>
+    </StrictMode>
+  ) : (
+    <StrictMode>
       <ThemeProvider>
         <App />
       </ThemeProvider>
-    </ClerkProvider>
-  </StrictMode>,
-)
+    </StrictMode>
+  );
+
+  createRoot(rootElement).render(content);
+};
+
+// Render immediately (don't wait for Clerk)
+render();
