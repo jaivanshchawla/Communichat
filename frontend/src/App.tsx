@@ -3,6 +3,8 @@ import { SignedIn, SignedOut, UserButton, useAuth, SignInButton } from '@clerk/c
 import { api, setAuthToken } from './api';
 import { PostCard } from './components/PostCard';
 import { CreatePost } from './components/CreatePost';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { Leaderboard } from './components/Leaderboard';
 import './App.css';
 
 interface Post {
@@ -21,7 +23,6 @@ function Feed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
-  const [creating, setCreating] = useState(false);
 
   // Load posts on mount and when auth changes
   useEffect(() => {
@@ -32,7 +33,9 @@ function Feed() {
   useEffect(() => {
     const setupAuth = async () => {
       const token = await getToken();
-      setAuthToken(token);
+      if (token) {
+        setAuthToken(token);
+      }
     };
     setupAuth();
   }, [getToken]);
@@ -41,195 +44,112 @@ function Feed() {
     try {
       setLoading(true);
       setError('');
-      console.log('🚀 Fetching posts from API...');
       const response = await api.getPosts();
-      console.log('✅ Posts response:', response);
-      console.log('✅ Posts data:', response.data);
       const postsData = response.data.results || response.data;
-      console.log('✅ Extracted posts:', postsData);
       setPosts(postsData);
-    } catch (err: any) {
-      console.error('❌ Failed to load posts:', err);
-      console.error('❌ Error message:', err.message);
-      console.error('❌ Error response:', err.response);
-      console.error('❌ Error config:', err.config);
-      setError('Failed to load posts. Please try again.');
+    } catch (err) {
+      console.error('Error loading posts:', err);
+      setError('Failed to load posts');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreatePost = async (title: string, content: string) => {
-    if (!userId) {
-      setError('You must be signed in to create a post');
-      return;
-    }
-
-    try {
-      setCreating(true);
-      await api.createPost({ title, content });
-      await loadPosts();
-    } catch (err) {
-      console.error('Failed to create post:', err);
-      throw new Error('Failed to create post');
-    } finally {
-      setCreating(false);
-    }
+  const handlePostCreated = () => {
+    loadPosts();
   };
 
   const handleLike = async (postId: number) => {
     try {
-      if (likedPosts.has(postId)) {
-        await api.unlikePost(postId);
-        setLikedPosts(prev => {
-          const next = new Set(prev);
-          next.delete(postId);
-          return next;
-        });
-      } else {
-        await api.likePost(postId);
-        setLikedPosts(prev => new Set(prev).add(postId));
-      }
-      await loadPosts();
+      await api.likePost(postId);
+      setLikedPosts(prev => new Set(prev).add(postId));
+      // Reload posts to get updated like counts
+      loadPosts();
     } catch (err) {
-      console.error('Failed to like post:', err);
+      console.error('Error liking post:', err);
     }
   };
 
-  const handleComment = (postId: number) => {
-    alert(`Comment feature coming soon! (Post ID: ${postId})`);
-  };
-
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px' }}>
+    <div className="min-h-screen bg-base-100">
       {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '24px',
-        paddingBottom: '16px',
-        borderBottom: '2px solid #4CAF50'
-      }}>
-        <h1 style={{ margin: 0, color: '#1a1a1a' }}>🎯 PLAYTO Community</h1>
-        <UserButton />
+      <header className="navbar bg-base-200 shadow-sm sticky top-0 z-40">
+        <div className="flex-1">
+          <a className="btn btn-ghost text-xl font-bold">🔥 PLAYTO</a>
+        </div>
+        <div className="flex-none gap-2">
+          <ThemeSwitcher />
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Feed (Main) */}
+          <div className="lg:col-span-3">
+            {/* Create Post */}
+            <SignedIn>
+              <div className="mb-6">
+                <CreatePost onPostCreated={handlePostCreated} />
+              </div>
+            </SignedIn>
+
+            {/* Posts Feed */}
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <span className="loading loading-spinner loading-lg"></span>
+              </div>
+            ) : error ? (
+              <div className="alert alert-error">
+                <span>{error}</span>
+              </div>
+            ) : posts.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-lg opacity-60">No posts yet. Be the first to post! 🚀</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {posts.map(post => (
+                  <PostCard 
+                    key={post.id} 
+                    post={post}
+                    onLike={handleLike}
+                    isLiked={likedPosts.has(post.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Leaderboard */}
+            <Leaderboard />
+
+            {/* Sign in prompt */}
+            <SignedOut>
+              <div className="card bg-base-200 shadow-md p-6 text-center">
+                <h3 className="font-bold text-lg mb-4">Join the Community</h3>
+                <p className="text-sm mb-4 opacity-70">Sign in to post and engage with the community.</p>
+                <SignInButton>
+                  <button className="btn btn-primary w-full">Sign In</button>
+                </SignInButton>
+              </div>
+            </SignedOut>
+          </div>
+        </div>
       </div>
-
-      {/* Error message */}
-      {error && (
-        <div style={{
-          background: '#ffebee',
-          color: '#c62828',
-          padding: '12px',
-          borderRadius: '4px',
-          marginBottom: '16px'
-        }}>
-          {error}
-        </div>
-      )}
-
-      {/* Create post form */}
-      <SignedIn>
-        <CreatePost onSubmit={handleCreatePost} isLoading={creating} />
-      </SignedIn>
-
-      {/* Posts feed */}
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: '#999' }}>
-          Loading posts...
-        </div>
-      ) : posts.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: '#999' }}>
-          No posts yet. Be the first to share!
-        </div>
-      ) : (
-        <div>
-          {posts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              onLike={handleLike}
-              onComment={handleComment}
-              isLiked={likedPosts.has(post.id)}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Sign in prompt */}
-      <SignedOut>
-        <div style={{
-          textAlign: 'center',
-          padding: '40px',
-          background: '#f5f5f5',
-          borderRadius: '8px',
-          marginTop: '24px'
-        }}>
-          <h2 style={{ color: '#1a1a1a' }}>Welcome to PLAYTO</h2>
-          <p style={{ color: '#666', marginBottom: '20px' }}>
-            Sign in to view and create posts
-          </p>
-          <SignInButton mode="modal">
-            <button style={{
-              background: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              padding: '12px 24px',
-              borderRadius: '4px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              marginBottom: '20px'
-            }}>
-              Sign In
-            </button>
-          </SignInButton>
-          <p style={{ color: '#999', fontSize: '14px' }}>
-            Demo users available: demo@playto.app, alice@playto.app, bob@playto.app
-          </p>
-        </div>
-      </SignedOut>
     </div>
   );
 }
 
-function App() {
-  const [apiStatus, setApiStatus] = useState<'checking' | 'ok' | 'error'>('checking');
-
-  // Check API health on mount
-  useEffect(() => {
-    const checkAPI = async () => {
-      try {
-        console.log('🔍 Checking API health...');
-        const response = await api.healthCheck();
-        console.log('✅ API is healthy:', response.data);
-        setApiStatus('ok');
-      } catch (err: any) {
-        console.error('❌ API health check failed:', err);
-        console.error('❌ Error message:', err.message);
-        console.error('❌ Error response:', err.response);
-        setApiStatus('error');
-      }
-    };
-    checkAPI();
-  }, []);
-
+export default function App() {
   return (
-    <div>
-      {apiStatus === 'error' && (
-        <div style={{
-          background: '#ff9800',
-          color: 'white',
-          padding: '12px',
-          textAlign: 'center',
-          fontSize: '14px'
-        }}>
-          ⚠️ Backend API is not responding. Make sure Django server is running on http://localhost:8000
-        </div>
-      )}
+    <SignedIn>
       <Feed />
-    </div>
+    </SignedIn>
   );
 }
-
-export default App;

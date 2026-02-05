@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import { api } from '../api';
 
 interface CreatePostProps {
-  onSubmit: (title: string, content: string) => Promise<void>;
-  isLoading?: boolean;
+  onPostCreated?: () => void;
 }
 
-export const CreatePost: React.FC<CreatePostProps> = ({ onSubmit, isLoading = false }) => {
+export const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,37 +21,28 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onSubmit, isLoading = fa
     }
 
     try {
-      await onSubmit(title, content);
+      setLoading(true);
+      await api.createPost({ title, content });
       setTitle('');
       setContent('');
+      if (onPostCreated) {
+        onPostCreated();
+      }
     } catch (err) {
+      console.error('Failed to create post:', err);
       setError(err instanceof Error ? err.message : 'Failed to create post');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        background: '#fff',
-        border: '1px solid #e0e0e0',
-        borderRadius: '8px',
-        padding: '16px',
-        marginBottom: '24px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}
-    >
-      <h3 style={{ margin: '0 0 16px 0', color: '#1a1a1a' }}>Create a Post</h3>
+    <form onSubmit={handleSubmit} className="card bg-base-100 shadow-md p-6">
+      <h3 className="text-lg font-bold mb-4">✨ Share Your Thoughts</h3>
 
       {error && (
-        <div style={{
-          background: '#ffebee',
-          color: '#c62828',
-          padding: '12px',
-          borderRadius: '4px',
-          marginBottom: '12px'
-        }}>
-          {error}
+        <div className="alert alert-error mb-4">
+          <span>{error}</span>
         </div>
       )}
 
@@ -59,52 +51,32 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onSubmit, isLoading = fa
         placeholder="Post title..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        disabled={isLoading}
-        style={{
-          width: '100%',
-          padding: '8px',
-          marginBottom: '12px',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          fontSize: '14px',
-          boxSizing: 'border-box'
-        }}
+        disabled={loading}
+        className="input input-bordered w-full mb-4"
       />
 
       <textarea
         placeholder="Share your thoughts, ideas, or updates..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        disabled={isLoading}
+        disabled={loading}
         rows={4}
-        style={{
-          width: '100%',
-          padding: '8px',
-          marginBottom: '12px',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          fontSize: '14px',
-          boxSizing: 'border-box',
-          fontFamily: 'inherit'
-        }}
+        className="textarea textarea-bordered w-full mb-4 resize-none"
       />
 
       <button
         type="submit"
-        disabled={isLoading}
-        style={{
-          background: '#4CAF50',
-          color: 'white',
-          padding: '10px 20px',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: isLoading ? 'not-allowed' : 'pointer',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          opacity: isLoading ? 0.6 : 1
-        }}
+        disabled={loading}
+        className="btn btn-primary w-full"
       >
-        {isLoading ? 'Publishing...' : 'Publish Post'}
+        {loading ? (
+          <>
+            <span className="loading loading-spinner loading-sm"></span>
+            Publishing...
+          </>
+        ) : (
+          'Publish Post'
+        )}
       </button>
     </form>
   );

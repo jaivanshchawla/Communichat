@@ -18,96 +18,62 @@ interface Post {
 interface PostCardProps {
   post: Post;
   onLike: (postId: number) => void;
-  onComment: (postId: number) => void;
   isLiked?: boolean;
-  canEdit?: boolean;
-  onDelete?: (postId: number) => void;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({
   post,
   onLike,
-  onComment,
   isLiked = false,
-  canEdit = false,
-  onDelete,
 }) => {
   const authorName = `${post.author.first_name} ${post.author.last_name}`.trim() || post.author.email;
-  const createdAt = new Date(post.created_at).toLocaleDateString();
+  const createdAt = new Date(post.created_at).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   return (
-    <div className="post-card" style={{
-      border: '1px solid #e0e0e0',
-      borderRadius: '8px',
-      padding: '16px',
-      marginBottom: '16px',
-      backgroundColor: '#fff',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-        <div>
-          <h3 style={{ margin: '0 0 8px 0', color: '#1a1a1a' }}>{post.title}</h3>
-          <p style={{ margin: '0 0 8px 0', color: '#666', fontSize: '14px' }}>
-            by <strong>{authorName}</strong> · {createdAt}
-          </p>
+    <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+      <div className="card-body">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="avatar placeholder">
+              <div className="bg-primary text-primary-content rounded-full w-10">
+                <span className="text-sm font-bold">
+                  {post.author.email.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            </div>
+            <div>
+              <p className="font-semibold">{authorName}</p>
+              <p className="text-xs opacity-60">{createdAt}</p>
+            </div>
+          </div>
         </div>
-        {canEdit && onDelete && (
+
+        {/* Title & Content */}
+        <h2 className="card-title text-lg mt-2">{post.title}</h2>
+        <p className="text-base leading-relaxed">{post.content}</p>
+
+        {/* Actions */}
+        <div className="card-actions justify-start mt-4 gap-3">
           <button
-            onClick={() => onDelete(post.id)}
-            style={{
-              background: '#ff4444',
-              color: 'white',
-              border: 'none',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
+            onClick={() => onLike(post.id)}
+            className={`btn btn-sm gap-2 ${
+              isLiked 
+                ? 'btn-primary' 
+                : 'btn-outline'
+            }`}
           >
-            Delete
+            👍 {post.likes_count}
           </button>
-        )}
-      </div>
-
-      <p style={{ margin: '12px 0', lineHeight: '1.5', color: '#333' }}>
-        {post.content}
-      </p>
-
-      <div style={{
-        display: 'flex',
-        gap: '16px',
-        marginTop: '12px',
-        paddingTop: '12px',
-        borderTop: '1px solid #f0f0f0'
-      }}>
-        <button
-          onClick={() => onLike(post.id)}
-          style={{
-            background: isLiked ? '#ff6b6b' : '#f0f0f0',
-            color: isLiked ? 'white' : '#333',
-            border: 'none',
-            padding: '6px 12px',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
-        >
-          👍 {post.likes_count}
-        </button>
-        <button
-          onClick={() => onComment(post.id)}
-          style={{
-            background: '#f0f0f0',
-            color: '#333',
-            border: 'none',
-            padding: '6px 12px',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
-        >
-          💬 {post.comments_count}
-        </button>
+          <button className="btn btn-sm btn-outline gap-2">
+            💬 {post.comments_count}
+          </button>
+        </div>
       </div>
     </div>
   );
