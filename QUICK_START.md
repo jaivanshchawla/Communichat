@@ -1,8 +1,8 @@
 # PLAYTO Quick Reference Card
 
-## 🎯 Current Status: ✅ FULLY OPERATIONAL
+## 🎯 Current Status: ✅ FULLY OPERATIONAL & REDESIGNED
 
-Both servers are running and ready for testing!
+Both servers are running with new modern minimalist design!
 
 ---
 
@@ -29,24 +29,90 @@ Click "Sign In" button
 Use Clerk test credentials
 ```
 
-### Step 3: Explore
+### Step 3: Explore Features
 ```
-View 4 demo posts
-Like posts
-Create new posts  
-Add comments
+✅ View 10 demo posts
+✅ Like posts (5 karma each)
+✅ Create new posts  
+✅ Add comments (1 karma each)
+✅ Reply to comments (nested up to 3 levels)
+✅ Switch themes with moon icon
+✅ View leaderboard
 ```
 
 ---
 
-## 📊 Demo Data Ready
+## 📊 Enhanced Demo Data
 
 | Item | Count | Status |
 |------|-------|--------|
-| Users | 3 | ✅ |
-| Posts | 4 | ✅ |
-| Comments | 6 | ✅ |
-| Likes | 6 | ✅ |
+| Users | 8 | ✅ |
+| Posts | 10 | ✅ |
+| Comments | 17 | ✅ |
+| Threaded Replies | 3 | ✅ |
+| Post Likes | 24 | ✅ |
+| Comment Likes | 12 | ✅ |
+
+---
+
+## 🎨 New Features
+
+### Modern Minimalist Design
+- ✅ Clean border-based cards
+- ✅ Gradient text branding
+- ✅ Better spacing and typography
+- ✅ Smooth animations
+- ✅ Responsive layout
+
+### Enhanced Theme Switcher
+- ✅ 30+ DaisyUI themes
+- ✅ Organized by light/dark
+- ✅ Emoji for each theme
+- ✅ Instant switching
+- ✅ Persistent storage
+
+### Improved Components
+- ✅ Better PostCard styling
+- ✅ Medal-based leaderboard
+- ✅ Enhanced comments
+- ✅ Better forms with labels
+- ✅ Cleaner UI overall
+
+---
+
+## 🌙 Theme Switcher
+
+**Location**: Top-right corner (moon icon)
+
+**Categories**:
+- **Light Themes**: ☀️ light, 🧁 cupcake, 🐝 bumblebee, 💚 emerald, 🌸 garden, 🌲 forest, 💧 aqua, 🎨 pastel, 🍋 lemonade
+- **Dark Themes**: 🌙 dark, 🌆 synthwave, 📻 retro, 🤖 cyberpunk, 💗 valentine, 🎃 halloween, ✨ fantasy, 📐 wireframe, ⚫ black, 👑 luxury, 🧛 dracula, 🖨️ cmyk, 🍂 autumn, 📊 business, ⚗️ acid, 🎵 lofi, 🌃 night, ☕ coffee, ❄️ winter, 🌑 dim, 🧊 nord, 🌅 sunset, 💼 corporate
+
+---
+
+## 👥 Demo Users
+
+All with password: `demopass123`
+
+- alice@playto.app - Alice Wonderland
+- bob@playto.app - Bob Builder
+- charlie@playto.app - Charlie Coder
+- diana@playto.app - Diana Designer
+- eve@playto.app - Eve Innovator
+- frank@playto.app - Frank Founder
+- grace@playto.app - Grace Guru
+- henry@playto.app - Henry Hacker
+
+---
+
+## 🏆 Leaderboard System
+
+**Karma Points**:
+- 5 points per post like
+- 1 point per comment like
+
+**Demo Rankings**:
+Shows top 5 users with medal emojis (🥇🥈🥉⭐)
 
 ---
 
