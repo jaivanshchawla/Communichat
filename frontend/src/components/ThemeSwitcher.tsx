@@ -4,6 +4,13 @@ import { useTheme } from '../context/ThemeContext';
 export const ThemeSwitcher: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
+  const handleThemeChange = (newTheme: string) => {
+    console.log('🎨 Theme button clicked:', newTheme);
+    console.log('📝 Current theme from context:', theme);
+    setTheme(newTheme as any);
+    console.log('✅ setTheme called for:', newTheme);
+  };
+
   // Group themes by category for better organization
   const lightThemes = ['light', 'cupcake', 'bumblebee', 'emerald', 'garden', 'forest', 'aqua', 'pastel', 'lemonade'];
   const darkThemes = ['dark', 'synthwave', 'retro', 'cyberpunk', 'halloween', 'fantasy', 'wireframe', 'black', 'luxury', 'dracula', 'cmyk', 'autumn', 'business', 'acid', 'night', 'coffee', 'winter', 'dim', 'nord', 'sunset', 'corporate', 'lofi', 'valentine'];
@@ -69,7 +76,7 @@ export const ThemeSwitcher: React.FC = () => {
             {lightThemes.map((t) => (
               <button
                 key={t}
-                onClick={() => setTheme(t as any)}
+                onClick={() => handleThemeChange(t)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm capitalize font-medium transition-all ${
                   theme === t
                     ? 'bg-primary text-primary-content font-bold'
@@ -88,7 +95,7 @@ export const ThemeSwitcher: React.FC = () => {
             {darkThemes.map((t) => (
               <button
                 key={t}
-                onClick={() => setTheme(t as any)}
+                onClick={() => handleThemeChange(t)}
                 className={`w-full text-left px-3 py-2 rounded-lg text-sm capitalize font-medium transition-all ${
                   theme === t
                     ? 'bg-primary text-primary-content font-bold'

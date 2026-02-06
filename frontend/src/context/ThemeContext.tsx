@@ -38,9 +38,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const setTheme = (newTheme: Theme) => {
+    console.log('🎨 setTheme called with:', newTheme);
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
+    console.log('✅ theme applied:', {
+      state: newTheme,
+      localStorage: localStorage.getItem('theme'),
+      attributeSet: document.documentElement.getAttribute('data-theme')
+    });
   };
 
   return (
