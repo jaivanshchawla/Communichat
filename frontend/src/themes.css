@@ -1,0 +1,261 @@
+/* DaisyUI theme colors - manually defined for data-theme attribute */
+
+/* Light theme */
+html[data-theme="light"],
+html[data-theme="cupcake"],
+html[data-theme="bumblebee"],
+html[data-theme="emerald"],
+html[data-theme="garden"],
+html[data-theme="forest"],
+html[data-theme="aqua"],
+html[data-theme="pastel"],
+html[data-theme="lemonade"] {
+  --p: 49 89% 38%;  /* primary - blue */
+  --pc: 0 0% 100%;  /* primary content - white */
+  --s: 38 92% 50%;  /* secondary - teal */
+  --sc: 0 0% 100%;  /* secondary content - white */
+  --a: 45 93% 47%;  /* accent - yellow */
+  --ac: 0 0% 0%;    /* accent content - black */
+  --n: 0 0% 100%;   /* neutral - white */
+  --nc: 0 0% 0%;    /* neutral content - black */
+  --b1: 0 0% 100%;  /* base 1 - white */
+  --b2: 0 0% 95%;   /* base 2 - light gray */
+  --b3: 0 0% 90%;   /* base 3 - gray */
+  --bc: 0 0% 0%;    /* base content - black */
+  --er: 0 100% 71%; /* error - red */
+  --erc: 0 0% 100%; /* error content - white */
+  --wa: 36 100% 50%; /* warning - amber */
+  --wac: 0 0% 0%;    /* warning content - black */
+  --su: 158 71% 37%; /* success - green */
+  --suc: 0 0% 100%;  /* success content - white */
+  color-scheme: light;
+}
+
+/* Dark theme */
+html[data-theme="dark"],
+html[data-theme="synthwave"],
+html[data-theme="retro"],
+html[data-theme="cyberpunk"],
+html[data-theme="halloween"],
+html[data-theme="fantasy"],
+html[data-theme="wireframe"],
+html[data-theme="black"],
+html[data-theme="luxury"],
+html[data-theme="dracula"],
+html[data-theme="cmyk"],
+html[data-theme="autumn"],
+html[data-theme="business"],
+html[data-theme="acid"],
+html[data-theme="night"],
+html[data-theme="coffee"],
+html[data-theme="winter"],
+html[data-theme="dim"],
+html[data-theme="nord"],
+html[data-theme="sunset"] {
+  --p: 49 89% 38%;  /* primary */
+  --pc: 0 0% 100%;  /* primary content */
+  --s: 38 92% 50%;  /* secondary */
+  --sc: 0 0% 100%;  /* secondary content */
+  --a: 45 93% 47%;  /* accent */
+  --ac: 0 0% 0%;    /* accent content */
+  --n: 60 10% 20%;  /* neutral - dark gray */
+  --nc: 0 0% 100%;  /* neutral content - white */
+  --b1: 0 0% 10%;   /* base 1 - very dark */
+  --b2: 0 0% 20%;   /* base 2 - dark */
+  --b3: 0 0% 30%;   /* base 3 - darker gray */
+  --bc: 0 0% 100%;  /* base content - white */
+  --er: 0 100% 71%; /* error */
+  --erc: 0 0% 100%; /* error content */
+  --wa: 36 100% 50%; /* warning */
+  --wac: 0 0% 0%;    /* warning content */
+  --su: 158 71% 37%; /* success */
+  --suc: 0 0% 100%;  /* success content */
+  color-scheme: dark;
+}
+
+/* Theme-specific overrides */
+
+/* Cupcake */
+html[data-theme="cupcake"] {
+  --p: 315 54% 71%;  /* pink/cupcake */
+  --s: 351 70% 55%;
+  --a: 33 80% 60%;
+  --b1: 280 27% 95%;
+}
+
+/* Bumblebee */
+html[data-theme="bumblebee"] {
+  --p: 48 92% 50%;  /* yellow */
+  --s: 45 93% 47%;
+  color-scheme: light;
+}
+
+/* Synthwave */
+html[data-theme="synthwave"] {
+  --p: 280 76% 50%;  /* purple */
+  --s: 200 100% 50%; /* cyan */
+  --a: 320 100% 50%; /* pink */
+  --n: 260 20% 15%;
+}
+
+/* Cyberpunk */
+html[data-theme="cyberpunk"] {
+  --p: 320 100% 50%;  /* magenta */
+  --s: 180 100% 50%;  /* cyan */
+  --a: 60 100% 50%;   /* yellow */
+  --n: 0 0% 5%;
+}
+
+/* Halloween */
+html[data-theme="halloween"] {
+  --p: 30 100% 50%;   /* orange */
+  --s: 260 67% 45%;   /* purple */
+  --a: 0 0% 0%;       /* black */
+}
+
+/* Fantasy */
+html[data-theme="fantasy"] {
+  --p: 240 84% 60%;   /* blue */
+  --s: 140 61% 45%;   /* green */
+  --a: 280 70% 60%;   /* purple */
+  color-scheme: light;
+}
+
+/* Forest */
+html[data-theme="forest"] {
+  --p: 130 57% 37%;   /* forest green */
+  --s: 100 45% 40%;
+  color-scheme: light;
+}
+
+/* Autumn */
+html[data-theme="autumn"] {
+  --p: 30 70% 55%;    /* orange */
+  --s: 330 70% 55%;   /* red */
+  --a: 40 90% 50%;    /* amber */
+}
+
+/* Business */
+html[data-theme="business"] {
+  --p: 210 100% 40%;  /* dark blue */
+  --nc: 0 0% 100%;
+}
+
+/* Sunset */
+html[data-theme="sunset"] {
+  --p: 20 90% 60%;    /* orange/coral */
+  --s: 330 100% 55%;  /* pink */
+  --a: 40 100% 50%;   /* yellow */
+  --b1: 200 30% 90%;
+  color-scheme: light;
+}
+
+/* Nord */
+html[data-theme="nord"] {
+  --p: 210 67% 48%;   /* nord blue */
+  --s: 192 65% 61%;
+  --a: 14 95% 55%;    /* nord orange */
+}
+
+/* Coffee */
+html[data-theme="coffee"] {
+  --p: 30 58% 40%;    /* brown */
+  --s: 30 70% 55%;    /* lighter brown */
+  --n: 35 10% 15%;
+}
+
+/* Winter */
+html[data-theme="winter"] {
+  --p: 213 97% 58%;   /* ice blue */
+  --s: 198 89% 48%;
+  --a: 330 100% 60%;  /* pink accent */
+  color-scheme: light;
+}
+
+/* Dracula */
+html[data-theme="dracula"] {
+  --p: 265 89% 66%;   /* purple */
+  --s: 31 100% 67%;   /* orange */
+  --a: 320 100% 70%;  /* pink */
+  --n: 240 21% 15%;
+}
+
+/* Retro */
+html[data-theme="retro"] {
+  --p: 290 70% 50%;   /* retro purple */
+  --s: 30 80% 60%;    /* retro orange */
+  --a: 150 50% 50%;   /* retro green */
+  --b1: 30 50% 85%;
+  color-scheme: light;
+}
+
+/* Apply theme colors to UI elements */
+:root {
+  color-scheme: light dark;
+  --fallback-p: hsl(var(--p) / 1);
+  --fallback-pc: hsl(var(--pc) / 1);
+  --fallback-s: hsl(var(--s) / 1);
+  --fallback-sc: hsl(var(--sc) / 1);
+  --fallback-a: hsl(var(--a) / 1);
+  --fallback-ac: hsl(var(--ac) / 1);
+  --fallback-n: hsl(var(--n) / 1);
+  --fallback-nc: hsl(var(--nc) / 1);
+  --fallback-b1: hsl(var(--b1) / 1);
+  --fallback-b2: hsl(var(--b2) / 1);
+  --fallback-b3: hsl(var(--b3) / 1);
+  --fallback-bc: hsl(var(--bc) / 1);
+}
+
+/* Map Tailwind colors to theme colors */
+html {
+  color-scheme: light dark;
+}
+
+/* DaisyUI utility classes mapped to themer vars */
+.btn-primary {
+  background-color: var(--fallback-p);
+  color: var(--fallback-pc);
+}
+
+.text-primary {
+  color: var(--fallback-p);
+}
+
+.bg-primary {
+  background-color: var(--fallback-p);
+}
+
+.border-primary {
+  border-color: var(--fallback-p);
+}
+
+.bg-base-100 {
+  background-color: var(--fallback-b1);
+  color: var(--fallback-bc);
+}
+
+.bg-base-200 {
+  background-color: var(--fallback-b2);
+  color: var(--fallback-bc);
+}
+
+.bg-base-300 {
+  background-color: var(--fallback-b3);
+  color: var(--fallback-bc);
+}
+
+.border-base-300 {
+  border-color: var(--fallback-b3);
+}
+
+.text-base-content {
+  color: var(--fallback-bc);
+}
+
+.btn-ghost {
+  color: var(--fallback-bc);
+}
+
+.btn-ghost:hover {
+  background-color: var(--fallback-b2);
+}
