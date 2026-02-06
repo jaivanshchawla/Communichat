@@ -92,6 +92,16 @@ function Feed() {
         <nav className="flex-none gap-4 items-center">
           <span className="text-xs font-medium opacity-60 hidden sm:inline">Community Feed</span>
           <span className="text-[10px] opacity-40" title={`DOM data-theme: ${document.documentElement.getAttribute('data-theme')}`}>Theme: {theme}</span>
+          <button
+            onClick={() => {
+              console.log('🧪 Test button clicked - changing to sunset');
+              document.documentElement.setAttribute('data-theme', 'sunset');
+            }}
+            className="text-[10px] px-2 py-1 bg-orange-500 text-white rounded opacity-70 hover:opacity-100"
+            title="Click to test theme change directly to sunset"
+          >
+            Test
+          </button>
           <ThemeSwitcher />
           <SignedIn>
             <UserButton />
