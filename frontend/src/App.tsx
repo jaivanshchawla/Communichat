@@ -5,6 +5,7 @@ import { PostCard } from './components/PostCard';
 import { CreatePost } from './components/CreatePost';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Leaderboard } from './components/Leaderboard';
+import { useTheme } from './context/ThemeContext';
 import './App.css';
 
 interface Post {
@@ -19,6 +20,7 @@ interface Post {
 
 function Feed() {
   const { getToken, userId, isLoaded } = useAuth();
+  const { theme } = useTheme();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -89,6 +91,7 @@ function Feed() {
         </div>
         <nav className="flex-none gap-4 items-center">
           <span className="text-xs font-medium opacity-60 hidden sm:inline">Community Feed</span>
+          <span className="text-[10px] opacity-40" title={`DOM data-theme: ${document.documentElement.getAttribute('data-theme')}`}>Theme: {theme}</span>
           <ThemeSwitcher />
           <SignedIn>
             <UserButton />

@@ -38,15 +38,27 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const setTheme = (newTheme: Theme) => {
-    console.log('🎨 setTheme called with:', newTheme);
+    console.log('🎨 [setTheme] Called with:', newTheme);
+    console.log('📍 [setTheme] Current DOM data-theme before change:', document.documentElement.getAttribute('data-theme'));
+    
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
+    
+    // Force synchronous DOM update
     document.documentElement.setAttribute('data-theme', newTheme);
-    console.log('✅ theme applied:', {
+    
+    // Verify it was set
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    console.log('✅ [setTheme] Theme applied:', {
       state: newTheme,
       localStorage: localStorage.getItem('theme'),
-      attributeSet: document.documentElement.getAttribute('data-theme')
+      domAttribute: currentTheme,
+      match: currentTheme === newTheme
     });
+    
+    // Check if DaisyUI CSS is loaded
+    const styles = window.getComputedStyle(document.documentElement);
+    console.log('🎨 [setTheme] Root element CSS var --p:', styles.getPropertyValue('--p'));
   };
 
   return (
