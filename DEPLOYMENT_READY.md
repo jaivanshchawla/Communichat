@@ -1,5 +1,20 @@
 # PLAYTO Community Feed - Deployment Automation Complete ✅
 
+## 🚀 LATEST UPDATE - February 6, 2026
+
+### Fresh Deployment with Bug Fixes & Theme Improvements ✨
+
+**Status**: Code pushed to GitHub, ready for Vercel deployment
+
+**What's New**:
+1. ✅ CORS configuration fixed for localhost:5174
+2. ✅ Theme switcher simplified (state-based menu instead of dropdown)
+3. ✅ Comprehensive debug logging added for theme switching
+4. ✅ Test button added to diagnose DaisyUI CSS loading
+5. ✅ Backend API verified working with seeded demo data
+
+---
+
 ## What Has Been Set Up
 
 Your full-stack PLAYTO Community Feed application is now completely configured and ready for automated deployment to production!
