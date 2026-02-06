@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 export const ThemeSwitcher: React.FC = () => {
-  const { theme, setTheme, themes } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   // Group themes by category for better organization
   const lightThemes = ['light', 'cupcake', 'bumblebee', 'emerald', 'garden', 'forest', 'aqua', 'pastel', 'lemonade'];
