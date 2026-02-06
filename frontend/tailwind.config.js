@@ -48,6 +48,8 @@ export default {
       "dim",
       "nord",
       "sunset",
+      "caramellatte",
+      "silk",
     ],
     darkTheme: "dark",
     base: true,
