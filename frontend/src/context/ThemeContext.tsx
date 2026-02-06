@@ -56,9 +56,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       match: currentTheme === newTheme
     });
     
-    // Check if DaisyUI CSS is loaded
+    // Check if DaisyUI CSS is loaded (verify color-primary variable exists)
     const styles = window.getComputedStyle(document.documentElement);
-    console.log('🎨 [setTheme] Root element CSS var --p:', styles.getPropertyValue('--p'));
+    const primaryColor = styles.getPropertyValue('--color-primary').trim();
+    console.log('🎨 [setTheme] DaisyUI --color-primary:', primaryColor || 'NOT SET');
+    console.log('🎨 [setTheme] Available computed styles count:', Object.keys(styles).length);
   };
 
   return (
