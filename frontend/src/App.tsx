@@ -91,17 +91,6 @@ function Feed() {
         </div>
         <nav className="flex-none gap-4 items-center">
           <span className="text-xs font-medium opacity-60 hidden sm:inline">Community Feed</span>
-          <span className="text-[10px] opacity-40" title={`DOM data-theme: ${document.documentElement.getAttribute('data-theme')}`}>Theme: {theme}</span>
-          <button
-            onClick={() => {
-              console.log('🧪 Test button clicked - changing to sunset');
-              document.documentElement.setAttribute('data-theme', 'sunset');
-            }}
-            className="text-[10px] px-2 py-1 bg-orange-500 text-white rounded opacity-70 hover:opacity-100"
-            title="Click to test theme change directly to sunset"
-          >
-            Test
-          </button>
           <ThemeSwitcher />
           <SignedIn>
             <UserButton />
@@ -142,8 +131,8 @@ function Feed() {
             ) : (
               <div className="space-y-6">
                 {posts.map(post => (
-                  <PostCard 
-                    key={post.id} 
+                  <PostCard
+                    key={post.id}
                     post={post}
                     onLike={handleLike}
                     isLiked={likedPosts.has(post.id)}
@@ -190,20 +179,20 @@ export default function App() {
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">PLAYTO</h1>
                 <p className="text-sm opacity-70 mt-2">A modern community feed</p>
               </div>
-              
+
               <p className="text-center text-sm opacity-70 mb-8">Share ideas • Discuss topics • Build karma</p>
-              
+
               <div className="flex items-center justify-center gap-2 mb-6 p-4 bg-base-100 rounded-lg border border-base-300">
                 <ThemeSwitcher />
                 <span className="text-xs opacity-50">Pick your theme</span>
               </div>
-              
+
               <SignInButton>
                 <button className="btn btn-lg btn-primary w-full font-semibold">
                   Sign In with Clerk
                 </button>
               </SignInButton>
-              
+
               <p className="text-xs text-center opacity-50 mt-6">
                 Powered by Clerk Authentication
               </p>
