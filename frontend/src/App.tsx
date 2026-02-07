@@ -20,7 +20,7 @@ interface Post {
 
 function Feed() {
   const { getToken, userId, isLoaded } = useAuth();
-  const { theme } = useTheme();
+  useTheme(); // Initialize theme context but no invalid usage inside Feed
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
