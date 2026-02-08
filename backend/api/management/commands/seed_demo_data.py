@@ -10,294 +10,164 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Clear existing data
+        self.stdout.write('Cleaning up old data...')
         User.objects.all().delete()
         Post.objects.all().delete()
         Comment.objects.all().delete()
         PostLike.objects.all().delete()
         CommentLike.objects.all().delete()
         
-        # Create demo users
+        # Create varied demo users (15 profiles)
         demo_users = [
-            {
-                'email': 'alice@playto.app',
-                'username': 'alice_wonderland',
-                'first_name': 'Alice',
-                'last_name': 'Wonderland',
-                'clerk_id': 'user_alice456'
-            },
-            {
-                'email': 'bob@playto.app',
-                'username': 'bob_builder',
-                'first_name': 'Bob',
-                'last_name': 'Builder',
-                'clerk_id': 'user_bob789'
-            },
-            {
-                'email': 'charlie@playto.app',
-                'username': 'charlie_coder',
-                'first_name': 'Charlie',
-                'last_name': 'Coder',
-                'clerk_id': 'user_charlie101'
-            },
-            {
-                'email': 'diana@playto.app',
-                'username': 'diana_designer',
-                'first_name': 'Diana',
-                'last_name': 'Designer',
-                'clerk_id': 'user_diana202'
-            },
-            {
-                'email': 'eve@playto.app',
-                'username': 'eve_innovator',
-                'first_name': 'Eve',
-                'last_name': 'Innovator',
-                'clerk_id': 'user_eve303'
-            },
-            {
-                'email': 'frank@playto.app',
-                'username': 'frank_founder',
-                'first_name': 'Frank',
-                'last_name': 'Founder',
-                'clerk_id': 'user_frank404'
-            },
-            {
-                'email': 'grace@playto.app',
-                'username': 'grace_guru',
-                'first_name': 'Grace',
-                'last_name': 'Guru',
-                'clerk_id': 'user_grace505'
-            },
-            {
-                'email': 'henry@playto.app',
-                'username': 'henry_hacker',
-                'first_name': 'Henry',
-                'last_name': 'Hacker',
-                'clerk_id': 'user_henry606'
-            },
+            {'email': 'alice@playto.app', 'username': 'alice_w', 'first_name': 'Alice', 'last_name': 'Wonder', 'clerk_id': 'user_alice001'},
+            {'email': 'bob@playto.app', 'username': 'bob_builds', 'first_name': 'Bob', 'last_name': 'Builder', 'clerk_id': 'user_bob002'},
+            {'email': 'charlie@playto.app', 'username': 'code_charlie', 'first_name': 'Charlie', 'last_name': 'Dev', 'clerk_id': 'user_charlie003'},
+            {'email': 'diana@playto.app', 'username': 'design_diana', 'first_name': 'Diana', 'last_name': 'Prince', 'clerk_id': 'user_diana004'},
+            {'email': 'evan@playto.app', 'username': 'evan_flows', 'first_name': 'Evan', 'last_name': 'You', 'clerk_id': 'user_evan005'},
+            {'email': 'fiona@playto.app', 'username': 'fiona_front', 'first_name': 'Fiona', 'last_name': 'Stack', 'clerk_id': 'user_fiona006'},
+            {'email': 'george@playto.app', 'username': 'git_george', 'first_name': 'George', 'last_name': 'Branch', 'clerk_id': 'user_george007'},
+            {'email': 'hannah@playto.app', 'username': 'hannah_hacks', 'first_name': 'Hannah', 'last_name': 'Montana', 'clerk_id': 'user_hannah008'},
+            {'email': 'ian@playto.app', 'username': 'ian_infra', 'first_name': 'Ian', 'last_name': 'Ops', 'clerk_id': 'user_ian009'},
+            {'email': 'julia@playto.app', 'username': 'julia_java', 'first_name': 'Julia', 'last_name': 'Roberts', 'clerk_id': 'user_julia010'},
+            {'email': 'kevin@playto.app', 'username': 'kube_kevin', 'first_name': 'Kevin', 'last_name': 'Kubernetes', 'clerk_id': 'user_kevin011'},
+            {'email': 'linda@playto.app', 'username': 'linux_linda', 'first_name': 'Linda', 'last_name': 'Torvalds', 'clerk_id': 'user_linda012'},
+            {'email': 'mike@playto.app', 'username': 'mike_micro', 'first_name': 'Mike', 'last_name': 'Service', 'clerk_id': 'user_mike013'},
+            {'email': 'nina@playto.app', 'username': 'node_nina', 'first_name': 'Nina', 'last_name': 'Node', 'clerk_id': 'user_nina014'},
+            {'email': 'oscar@playto.app', 'username': 'oscar_open', 'first_name': 'Oscar', 'last_name': 'Source', 'clerk_id': 'user_oscar015'},
         ]
         
         users = []
         for user_data in demo_users:
             user = User.objects.create_user(password='demopass123', **user_data)
             users.append(user)
-            self.stdout.write(self.style.SUCCESS(f'Created user: {user.email}'))
+            # self.stdout.write(f'User created: {user.username}')
         
-        # Create demo posts
-        demo_posts = [
-            {
-                'author': users[0],
-                'title': '🚀 Welcome to PLAYTO - The Future of Community',
-                'content': 'Excited to join PLAYTO! This platform looks amazing with its clean UI and real-time updates. Can\'t wait to connect with the community and share ideas. Love the theme switcher too!'
-            },
-            {
-                'author': users[1],
-                'title': '💡 Top 5 Tips for Productive Development',
-                'content': 'Here are my top 5 productivity tips after 10 years of development:\n1. Break work into small chunks\n2. Use version control religiously\n3. Write tests first\n4. Automate repetitive tasks\n5. Take breaks regularly\n\nWhich tip helps you the most?'
-            },
-            {
-                'author': users[2],
-                'title': '🎨 Design Inspiration from Nature',
-                'content': 'Just published my latest project inspired by nature. The organic curves and natural color palettes create such a calming visual experience. I spent weeks researching natural patterns and integrating them into the UI. The results are amazing!'
-            },
-            {
-                'author': users[3],
-                'title': '🔥 The Power of Minimalist Design',
-                'content': 'Less is more! Minimalist design isn\'t about being boring - it\'s about being intentional. Every element serves a purpose. Looking at PLAYTO\'s interface as a perfect example of modern minimalism.'
-            },
-            {
-                'author': users[4],
-                'title': '📱 Mobile-First Development Best Practices',
-                'content': 'In 2024, mobile first is not optional. Our latest stats show 75% of users access services via mobile. Tips:\n- Design for touch\n- Optimize images\n- Minimize network requests\n- Use responsive layouts\n\nShare your mobile dev tips!'
-            },
-            {
-                'author': users[5],
-                'title': '🌟 Building a Successful Remote Team',
-                'content': 'Managing a fully remote team of 15 people has been transformative. Clear communication, async-first culture, and celebrating wins together is key. Happy to share my playbook with anyone starting their remote journey.'
-            },
-            {
-                'author': users[6],
-                'title': '💻 The Evolution of Web Frameworks',
-                'content': 'From jQuery to React to Vue to Svelte - the journey of JavaScript frameworks is fascinating. Each solved specific problems of their time. What\'s your favorite framework and why? Curious to hear from the community!'
-            },
-            {
-                'author': users[7],
-                'title': '🏆 How Gamification Boosts Engagement',
-                'content': 'Just launched a gamification system in our app. Karma points, leaderboards, and badges increased user engagement by 300%! PLAYTO\'s approach with karma is brilliant. Who doesn\'t love seeing their name on the leaderboard?'
-            },
-            {
-                'author': users[0],
-                'title': '✨ Real-time Collaboration is the Future',
-                'content': 'Saw Google Docs change the world with real-time collab. Now it\'s everywhere - from Figma to code editors. What\'s next? Voice-driven development? AI pair programming? Excited to see what\'s coming!'
-            },
-            {
-                'author': users[2],
-                'title': '🌈 Color Theory in Digital Products',
-                'content': 'Color isn\'t just aesthetic - it\'s psychology! Different colors evoke different emotions. Blue = trust. Green = harmony. Red = urgency. PLAYTO\'s color system is perfectly thought out. Anyone want to discuss color theory?'
-            },
+        self.stdout.write(self.style.SUCCESS(f'Created {len(users)} users'))
+
+        # Topics and content templates
+        topics = [
+            ("Thinking about switching to Rust", "I've been a C++ dev for 10 years, but the memory safety guarantees of Rust are calling me. Has anyone made the switch recently? What was the hardest part?"),
+            ("Why I love Tailwind CSS", "Unpopular opinion maybe, but utility classes invoke joy. Once you memorize the syntax, you never leave your HTML. My productivity has doubled."),
+            ("Microfrontends: A mistake?", "We split our app into 20 microfrontends and now deployment is a nightmare. Is the complexity worth the isolation? Needed a rant."),
+            ("The state of AI agents", "Just tried the latest models. They can write decent boilerplate but struggle with complex system architecture. We are safe... for now."),
+            ("Best mechanical keyboard switches?", "Clicky blues or linear reds? My coworkers hate the clicky ones but I type faster. Help me decide."),
+            ("Deploying on Friday", "Just pushed to prod. Wish me luck. 🍺"),
+            ("Understanding OAuth2 flow", " spent 4 hours debugging a redirect loop. The spec is dry but necessary reading. Anyone have a good simplified guide?"),
+            ("Remote work vs Office", "My company is asking us to return to office 3 days a week. I've been remote for 4 years and love it. Time to look for a new job?"),
+            ("Docker optimization tips", "Reduced our image size from 1.2GB to 80MB using multi-stage builds and Alpine. Feels good man."),
+            ("Javascript fatigue is real", "Every week there is a new framework. Can we just agree on one for 5 years please?"),
+            ("SQL vs NoSQL in 2024", "With modern Postgres JSONB support, is there still a strong case for Mongo for general purpose apps? Discuss."),
+            ("Dark mode design patterns", "Creating a dark mode isn't just inverting colors. You need to adjust saturation and contrast. Setup a design system first!"),
+            ("Vim or Emacs?", "Starting a war in the comments. I use VS Code with Vim bindings. Best of both worlds."),
+            ("Junior Dev advice", "Don't be afraid to ask questions. We'd rather you ask than spend 3 days stuck on a config issue."),
+            ("Coffee Setup", "Aeropress is the superior brewing method. Fight me."),
+            ("Kubernetes is complexity", "Do you really need K8s for your startup with 100 users? Probably not. Stick to a PaaS."),
+            ("Typescript strict mode", "Enabling strict null checks revealed 400 errors in our legacy codebase. It's going to be a long week."),
+            ("WebAssembly future", "Wasm is moving fast. Blazor, Rust for web... the browser is becoming a true OS."),
+            ("CSS Grid vs Flexbox", "Flex for 1D, Grid for 2D. It's not one or the other, use both!"),
+            ("Imposter Syndrome", "15 years in the industry and I still Google how to center a div. It's normal folks."),
+            ("Code Reviews", "Please stop nitpicking formatting in PRs. Use Prettier and focus on logic/architecture."),
+            ("Serverless costs", "Our Lambda bill exploded because of a recursive loop. Set up your billing alerts!"),
+            ("GraphQL caching", "Caching at the edge with GraphQL is tricky compared to REST. Any recommended patterns?"),
+            ("Svelte 5 runes", "The new reactivity model look interesting. Less magic, more explicit. I like it."),
+            ("Open Source contributing", "Want to contribute but don't know where to start? Documentation fixes are a great entry point!"),
+            ("Burnout is real", "Take your PTO. Your health is more important than the sprint goal."),
+            ("Clean Code", "Read 'Clean Code' again. Functions should do one thing and do it well."),
+            ("Legacy Code Refactoring", "Strangler Fig pattern is your friend. Don't rewrite from scratch unless necessary."),
+            ("Testing strategies", "Unit tests are fast, E2E are slow but realistic. Aim for the testing pyramid."),
+            ("Developer Experience (DX)", "Good docs and fast build times make happy developers. Invest in your internal tooling."),
+            ("API Design first", "Write the OpenAPI spec before writing code. It forces you to think about the interface."),
+            ("Windows for Dev", "WSL2 has made Windows a viable dev machine again. I'm actually impressed."),
+            ("Linux Distro hopping", "I use Arch btw. (Just kidding, Ubuntu LTS for stability)."),
+            ("Monitor setup", "One ultrawide or two monitors? I feels ultrawide helps with timeline based apps."),
+            ("Standing desks", "Back pain gone after getting a standing desk. Highly recommend."),
+            ("Podcast recommendations", "Syntax FM and Lex Fridman are my go-to for commute."),
+            ("Reading technical books", "Blogs are great but books give you deep structured knowledge. Currently reading DDIA."),
+            ("Mentorship", "Mentoring a junior dev has taught me more than I expected. Teaching reinforces learning."),
+            ("Side projects", "I have 50 unfinished domains. One day one of them will ship."),
+            ("Hackathons", "Great for networking but terrible for code quality. Fun weekend though!"),
+            ("Git rebase vs merge", "Rebase for a clean linear history. Merge for preserving context. Discuss."),
+            ("Env variables management", "Stop committing .env files! Use a secrets manager."),
+            ("CI/CD Pipelines", "If it's not automated, it's not done. Github Actions is so powerful now."),
+            ("Networking", "Your network is your net worth. Go to meetups!"),
+            ("Soft skills", "Coding is the easy part. Communication is the hard part."),
+            ("Dependency Hell", "npm install downloaded the internet. node_modules is the heaviest object in the universe."),
+            ("Browser DevTools", "Console.log is fine, but have you tried the debugger properly?"),
+            ("Accessibility (a11y)", "It's not an overlay. Check your contrast ratios and semantic HTML."),
+            ("SEO for SPA", "SSR is almost mandatory for SEO these days. Next.js/Nuxt handling it well."),
+            ("State Management", "Redux, Zustand, Context? Keep it simple until you can't."),
         ]
+
+        import random
         
         posts = []
-        for post_data in demo_posts:
-            post = Post.objects.create(**post_data)
+        # Generate 50 posts
+        for i in range(50):
+            topic = topics[i]
+            author = random.choice(users)
+            post = Post.objects.create(
+                author=author,
+                title=topic[0],
+                content=topic[1]
+            )
             posts.append(post)
-            self.stdout.write(self.style.SUCCESS(f'Created post: {post.title}'))
         
-        # Create demo comments
-        demo_comments = [
-            {
-                'post': posts[0],
-                'author': users[1],
-                'content': 'Welcome aboard! The community is super helpful and engaged. You\'ll love it here!'
-            },
-            {
-                'post': posts[0],
-                'author': users[3],
-                'content': 'The theme switcher is chef\'s kiss! Finally a platform that respects dark mode 🌙'
-            },
-            {
-                'post': posts[1],
-                'author': users[0],
-                'content': 'Writing tests first changed my life. Best decision I made as a developer!'
-            },
-            {
-                'post': posts[1],
-                'author': users[4],
-                'content': 'Tip #2 is golden. Lost weeks of work until I started using Git properly.'
-            },
-            {
-                'post': posts[2],
-                'author': users[1],
-                'content': 'The organic patterns are stunning! How long did this take to design?'
-            },
-            {
-                'post': posts[2],
-                'author': users[5],
-                'content': 'This is exactly what our new product needed. Great inspiration!'
-            },
-            {
-                'post': posts[3],
-                'author': users[2],
-                'content': 'Completely agree! Minimalism forces you to think about what\'s truly important.'
-            },
-            {
-                'post': posts[3],
-                'author': users[7],
-                'content': 'PLAYTO itself is a masterclass in minimalist design. Every button, every color, intentional.'
-            },
-            {
-                'post': posts[4],
-                'author': users[3],
-                'content': 'Mobile optimization is no longer a feature, it\'s a requirement. Great tips!'
-            },
-            {
-                'post': posts[5],
-                'author': users[0],
-                'content': 'Async-first culture sounds amazing. How do you handle urgent issues?'
-            },
-            {
-                'post': posts[6],
-                'author': users[4],
-                'content': 'React for me. JSX is just *chef\'s kiss* - perfect blend of JS and markup.'
-            },
-            {
-                'post': posts[7],
-                'author': users[6],
-                'content': 'Gamification works because it taps into intrinsic motivation. Love how PLAYTO does it!'
-            },
-            {
-                'post': posts[8],
-                'author': users[1],
-                'content': 'AI pair programming is coming sooner than we think. Copilot is just the beginning!'
-            },
-            {
-                'post': posts[9],
-                'author': users[5],
-                'content': 'Color psychology is underrated in dev communities. Thanks for bringing this up!'
-            },
-        ]
-        
+        self.stdout.write(self.style.SUCCESS(f'Created {len(posts)} posts'))
+
+        # Generate comments (avg 3 per post)
         comments = []
-        for comment_data in demo_comments:
-            comment = Comment.objects.create(**comment_data)
-            comments.append(comment)
-            self.stdout.write(self.style.SUCCESS(f'Created comment on {comment.post.title}'))
-        
-        # Create threaded replies
-        threaded_replies = [
-            {
-                'post': posts[0],
-                'author': users[5],
-                'content': 'The community has been nothing but supportive. Jump into any discussion!',
-                'parent': comments[0]
-            },
-            {
-                'post': posts[1],
-                'author': users[3],
-                'content': 'Definitely! Small increments keep motivation high too.',
-                'parent': comments[2]
-            },
-            {
-                'post': posts[5],
-                'author': users[7],
-                'content': 'Auto-escalation is the key. Define what\'s truly urgent vs important.',
-                'parent': comments[9]
-            },
+        comment_texts = [
+            "Totally agree!", "Interesting perspective.", "I ran into this last week.", 
+            "Thanks for sharing.", "Could you elaborate?", "Do you have a source for this?",
+            "This saved my day.", "Great tip!", "I prefer the alternative approach.",
+            "Wow, never thought of it that way.", "Same here.", "LOL true.",
+            "Can we connect to discuss this?", "Bookmark this.", "Well said.",
+            "I disagree respectfully.", "This is the way.", "Underrated advice.",
+            "Top tier content.", "Keep it up!"
         ]
+
+        for post in posts:
+            num_comments = random.randint(0, 8)
+            for _ in range(num_comments):
+                author = random.choice(users)
+                text = random.choice(comment_texts)
+                # Randomly make longer comments
+                if random.random() > 0.7:
+                    text += " " + random.choice(comment_texts)
+                
+                comment = Comment.objects.create(
+                    post=post,
+                    author=author,
+                    content=text
+                )
+                comments.append(comment)
+
+        self.stdout.write(self.style.SUCCESS(f'Created {len(comments)} comments'))
+
+        # Generate Likes
+        # Posts
+        post_likes_count = 0
+        for post in posts:
+            # 30% chance of being viral (many likes), else few likes
+            if random.random() > 0.8:
+                num_likes = random.randint(5, 15)
+            else:
+                num_likes = random.randint(0, 5)
+            
+            likers = random.sample(users, num_likes)
+            for liker in likers:
+                PostLike.objects.create(user=liker, post=post)
+                post_likes_count += 1
         
-        for reply_data in threaded_replies:
-            comment = Comment.objects.create(**reply_data)
-            comments.append(comment)
-            self.stdout.write(self.style.SUCCESS(f'Created reply to comment on {comment.post.title}'))
+        self.stdout.write(self.style.SUCCESS(f'Created {post_likes_count} post likes'))
         
-        # Create demo post likes - more distributed
-        like_data = [
-            {'user': users[1], 'post': posts[0]},
-            {'user': users[2], 'post': posts[0]},
-            {'user': users[3], 'post': posts[0]},
-            {'user': users[0], 'post': posts[1]},
-            {'user': users[2], 'post': posts[1]},
-            {'user': users[4], 'post': posts[1]},
-            {'user': users[1], 'post': posts[2]},
-            {'user': users[4], 'post': posts[2]},
-            {'user': users[5], 'post': posts[2]},
-            {'user': users[2], 'post': posts[3]},
-            {'user': users[5], 'post': posts[3]},
-            {'user': users[6], 'post': posts[3]},
-            {'user': users[3], 'post': posts[4]},
-            {'user': users[6], 'post': posts[4]},
-            {'user': users[0], 'post': posts[5]},
-            {'user': users[1], 'post': posts[5]},
-            {'user': users[4], 'post': posts[6]},
-            {'user': users[6], 'post': posts[6]},
-            {'user': users[2], 'post': posts[7]},
-            {'user': users[7], 'post': posts[7]},
-            {'user': users[0], 'post': posts[8]},
-            {'user': users[3], 'post': posts[8]},
-            {'user': users[5], 'post': posts[9]},
-            {'user': users[7], 'post': posts[9]},
-        ]
-        
-        for data in like_data:
-            PostLike.objects.create(**data)
-        
-        # Create comment likes
-        comment_like_data = [
-            {'user': users[2], 'comment': comments[0]},
-            {'user': users[0], 'comment': comments[1]},
-            {'user': users[1], 'comment': comments[2]},
-            {'user': users[2], 'comment': comments[4]},
-            {'user': users[5], 'comment': comments[5]},
-            {'user': users[3], 'comment': comments[6]},
-            {'user': users[4], 'comment': comments[7]},
-            {'user': users[1], 'comment': comments[8]},
-            {'user': users[6], 'comment': comments[10]},
-            {'user': users[2], 'comment': comments[11]},
-            {'user': users[0], 'comment': comments[12]},
-            {'user': users[3], 'comment': comments[13]},
-        ]
-        
-        for data in comment_like_data:
-            CommentLike.objects.create(**data)
-        
-        self.stdout.write(self.style.SUCCESS('✅ Demo data seeded successfully!'))
-        self.stdout.write(self.style.WARNING(f'Created {len(users)} users, {len(posts)} posts, {len(comments)} comments, {len(like_data)} post likes, {len(comment_like_data)} comment likes'))
+        # Comment Likes
+        comment_likes_count = 0
+        for comment in comments:
+            if random.random() > 0.5:
+                liker = random.choice(users)
+                CommentLike.objects.create(user=liker, comment=comment)
+                comment_likes_count += 1
+                
+        self.stdout.write(self.style.SUCCESS(f'Created {comment_likes_count} comment likes'))
+        self.stdout.write(self.style.SUCCESS('✅ Database seeded successfully!'))
