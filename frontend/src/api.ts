@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// Fallback to Render URL in production if env var is missing
+const PROD_API = 'https://communichat-944a.onrender.com/api';
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_API : 'http://localhost:8000/api');
 
 console.log('🔧 API Configuration:');
 console.log('   Base URL:', API_BASE);
