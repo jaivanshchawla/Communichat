@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import logo from './assets/transparent-image.png';
 import { SignedIn, SignedOut, UserButton, useAuth, SignInButton } from '@clerk/clerk-react';
 import { api, setAuthToken } from './api';
 import { PostCard } from './components/PostCard';
@@ -85,8 +86,9 @@ function Feed() {
       {/* Header */}
       <header className="navbar bg-base-200 shadow-sm sticky top-0 z-40 border-b border-base-300">
         <div className="flex-1">
-          <a className="flex items-center gap-2">
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">PLAYTO</span>
+          <a className="flex items-center gap-3">
+            <img src={logo} alt="communichat logo" className="w-10 h-10 object-contain" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">communichat</span>
           </a>
         </div>
         <nav className="flex-none gap-4 items-center">
@@ -176,8 +178,11 @@ export default function App() {
           <div className="card bg-base-200 shadow-2xl w-full max-w-md border border-base-300">
             <div className="card-body">
               <div className="text-center mb-6">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">PLAYTO</h1>
-                <p className="text-sm opacity-70 mt-2">A modern community feed</p>
+                <div className="flex justify-center mb-4">
+                  <img src={logo} alt="communichat logo" className="w-16 h-16 object-contain" />
+                </div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">communichat</h1>
+                <p className="text-sm opacity-70 mt-2">A modern community forum</p>
               </div>
 
               <p className="text-center text-sm opacity-70 mb-8">Share ideas • Discuss topics • Build karma</p>
