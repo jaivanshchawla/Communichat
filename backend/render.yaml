@@ -2,7 +2,7 @@ services:
   - type: web
     name: playto-backend
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
     startCommand: "gunicorn playto_config.wsgi:application"
     envVars:
       - key: PYTHON_VERSION

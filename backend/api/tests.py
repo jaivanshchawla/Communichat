@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.conf import settings
+from importlib.util import find_spec
 
 from .models import User, Post, PostLike
 
@@ -41,3 +43,10 @@ class APISmokeTests(TestCase):
 
         # Ensure the leaderboard includes karma for the author (5 points per like)
         self.assertTrue(any(item.get('karma_24h') == 5 for item in json['results']))
+
+    def test_optional_whitenoise_does_not_break_settings(self):
+        has_whitenoise = find_spec('whitenoise') is not None
+        self.assertEqual(
+            'whitenoise.middleware.WhiteNoiseMiddleware' in settings.MIDDLEWARE,
+            has_whitenoise,
+        )

@@ -14,6 +14,7 @@ from .serializers import (
     PostCreateSerializer,
     PostDetailSerializer,
     CommentSerializer,
+    CommentCreateSerializer,
     PostLikeSerializer,
     CommentLikeSerializer,
 )
