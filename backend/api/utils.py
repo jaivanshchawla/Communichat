@@ -1,7 +1,8 @@
 """
 PLAYTO Utility Functions - Karma, Leaderboard, N+1 Optimization
 """
-from django.db.models import Q, Count, F, Prefetch
+from django.db.models import Q, Count, F, Prefetch, Sum, Case, When, Value, IntegerField
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from datetime import timedelta
 from api.models import User, Post, Comment, PostLike, CommentLike
@@ -18,19 +19,36 @@ def get_leaderboard_24h(limit=5):
     Returns: List of dicts with user info and karma_24h
     """
     last_24h = timezone.now() - timedelta(hours=24)
-    
-    # Get users with their karma in last 24 hours
-    users_karma = User.objects.annotate(
-        karma_24h=Count(
-            'post_likes',
-            filter=Q(post_likes__created_at__gte=last_24h) * 5
-        ) + Count(
-            'comment_likes',
-            filter=Q(comment_likes__created_at__gte=last_24h)
+
+    # Build per-like karma values and sum them per user
+    users_karma = (
+        User.objects
+        .annotate(
+            post_karma=Coalesce(
+                Sum(
+                    Case(
+                        When(post_likes__created_at__gte=last_24h, then=Value(5)),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+                ),
+                0,
+            ),
+            comment_karma=Coalesce(
+                Sum(
+                    Case(
+                        When(comment_likes__created_at__gte=last_24h, then=Value(1)),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+                ),
+                0,
+            ),
         )
-    ).filter(
-        karma_24h__gt=0
-    ).order_by('-karma_24h')[:limit]
+        .annotate(karma_24h=F('post_karma') + F('comment_karma'))
+        .filter(karma_24h__gt=0)
+        .order_by('-karma_24h')[:limit]
+    )
     
     return [
         {
