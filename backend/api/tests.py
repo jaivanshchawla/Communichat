@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.conf import settings
 from importlib.util import find_spec
 
+from .auth import ClerkJWTAuthentication
 from .models import User, Post, PostLike
 
 
@@ -50,3 +51,42 @@ class APISmokeTests(TestCase):
             'whitenoise.middleware.WhiteNoiseMiddleware' in settings.MIDDLEWARE,
             has_whitenoise,
         )
+
+
+class ClerkAuthTests(TestCase):
+    def setUp(self):
+        self.auth = ClerkJWTAuthentication()
+
+    def test_get_or_create_user_creates_django_user_from_clerk_identity(self):
+        user = self.auth._get_or_create_user(
+            clerk_id='user_123',
+            email='clerkuser@example.com',
+            first_name='Clerk',
+            last_name='User',
+        )
+
+        self.assertIsInstance(user, User)
+        self.assertEqual(user.clerk_id, 'user_123')
+        self.assertEqual(user.email, 'clerkuser@example.com')
+        self.assertEqual(user.first_name, 'Clerk')
+        self.assertEqual(user.last_name, 'User')
+        self.assertFalse(user.has_usable_password())
+
+    def test_get_or_create_user_reuses_existing_email_and_backfills_clerk_id(self):
+        existing = User.objects.create_user(
+            username='existing',
+            email='existing@example.com',
+            password='testpass123',
+        )
+
+        user = self.auth._get_or_create_user(
+            clerk_id='user_456',
+            email='existing@example.com',
+            first_name='Existing',
+            last_name='Person',
+        )
+
+        self.assertEqual(user.id, existing.id)
+        self.assertEqual(user.clerk_id, 'user_456')
+        self.assertEqual(user.first_name, 'Existing')
+        self.assertEqual(user.last_name, 'Person')
